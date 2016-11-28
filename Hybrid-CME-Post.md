@@ -19,12 +19,13 @@ The first step in any automated orchestration is to identify (and verify when ne
 
 #### Kubernetes Cluster Blueprint
 
-Whenever considering an orchestration plan that consists of multiple blueprints, a key factor to consider is the outputs.  The Cloudify deployment proxy achieves its aims by copying outputs from configured blueprints, so the containing blueprint can perform the tasks it needs.  In this case, the "containing blueprint" will be the blueprint that deploys the services onto the Kubernetes cluster and (potentially) gets the IP addresses of the target VMs running Apache.  The Kubernetes cluster URL is already in the outputs of the standard Kubernetes blueprint.  For convenience, the Kubernetes blueprint will be changed to create the `10.100.102.0/24` network and the Apache VMs.  By virtue of starting the VMs, the blueprint will have access to the IPs (by virtue of a Cloud API, a host IP pool, or hard coding).  These can be then exposed in the outputs like so:
+Whenever considering an orchestration plan that consists of multiple blueprints, a key factor to consider is the outputs.  The Cloudify deployment proxy achieves its aims by copying outputs from configured blueprints, so the containing blueprint can perform the tasks it needs.  In this case, the "containing blueprint" will be the blueprint that deploys the services onto the Kubernetes cluster and (potentially) gets the IP addresses of the target VMs running Apache.  The Kubernetes cluster URL is already in the outputs of the standard Kubernetes blueprint.  For convenience, the Kubernetes blueprint will be changed to create the `10.100.102.0/24` network and the Apache VMs.  By virtue of starting the VMs, the blueprint will have access to the IPs and of course the subnet (by virtue of a Cloud API, a host IP pool, or hard coding).  These can be then exposed in the outputs like so:
 
 ```yaml
 outputs:
   apache_info:
     value:
+      network: {get_property: [ apache_subnet, subnet, cidr ]
       ips: {concat: [ {get_attribute: [ apache_host1, ip ] }, "," , {get_attribute: [ apache_host2, ip ] } ] }
 ```
 
@@ -44,4 +45,53 @@ The `service` blueprint has the responsibility to deploy the microservices (i.e.
 
 #### Deploying Quagga on Kubernetes
 
-Quagga is deployed on Kubernetes using a native Kubernetes descriptor.  For this example Quagga was only deployed to serve simple static routes.  As is typical with the Kubernetes plugin, a Kubernetes descriptor is referred to in the blueprint possibly with some overrides and environment variables that the container(s) can use to self configure.  One 
+Quagga is deployed on Kubernetes using a native Kubernetes descriptor.  For this example Quagga was only deployed to serve simple static routes.  As is typical with the Kubernetes plugin, a Kubernetes descriptor is referred to in the blueprint possibly with some overrides and environment variables that the container(s) can use to self configure.  In this case, the Quagga router is seeded with some static routes created by examining the outputs of the deployment proxy for the Kubernetes deployment, and passing them in the environment to the container.
+
+```yaml
+  quagga:
+    type: cloudify.kubernetes.Microservice
+    properties:
+      name: nginx
+      ssh_username: ubuntu
+      ssh_keyfilename: /root/.ssh/agent_key.pem
+      config_files:
+        - file: resources/kubernetes/pod.yaml
+        - file: resources/kubernetes/service.yaml
+      env:
+        ROUTES: [ {concat: [ get_property: [ kubernetes_proxy, vm_info, apache_subnet ], " dev eth1" ]} ]
+    relationships:
+      - type: cloudify.kubernetes.relationships.connected_to_master
+        target: kubernetes_proxy
+```
+
+The Quagga container deployment descriptor is simple, but note that it must be run with privileged access and use the host network stack:
+
+```yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: quagga
+spec:
+  replicas: 1
+  selector:
+    app: quagga
+  template:
+    metadata:
+      name: quagga
+      labels:
+        app: quagga
+    spec:
+      __hostNetwork: true__
+      containers:
+      - name: quagga
+        image: dfilppi/quagga
+        workingDir: /
+        command: ["bash","start.sh"]
+        ports:
+        - containerPort: 2601
+          hostIP: 0.0.0.0
+        securityContext:
+          __privileged: true__
+```
+
+```
