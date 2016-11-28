@@ -27,3 +27,21 @@ outputs:
     value:
       ips: {concat: [ {get_attribute: [ apache_host1, ip ] }, "," , {get_attribute: [ apache_host2, ip ] } ] }
 ```
+
+In addition to simply starting the instance, the Apache web server is started and supplied with an identifyable `index.html` so that load balancing can be verified via `curl`.  Also, to match the architecture, the Kubernetes blueprint must be changed to run the cluster in the `10.100.101.0/24` network.  To simplify the setup, the cluster will only have a single node that will contain the Quagga router, and have an interface to the `10.100.102.0/24` network.
+
+### VNF Preparation
+
+Quagga operates by manipulating the Linux kernel routing tables.  Unprivileged containers run in their own network namespace, and so won't affect the default tables.  To allow Quagga to access the routing tables, it must run in privileged mode, which is enabled by running the Kubernetes daemon (kubelet) with the `--allow-privileged` option.  The example Kubernetes blueprint already does this.  In addition to privileged mode is providing access to the host network stack.  This is covered in the section about the service blueprint.
+
+### Docker Swarm Blueprint
+
+The existing Docker Swarm cluster blueprint remains mostly unchanged except for locating the cluster in the `10.100.100.0/24` network, as well as having an interface to the `10.100.101.0/24` network.  In the case of an Openstack platform, this would mean defining a Port node on the existing Kubernetes network, and defining a relationship between the instance and port.
+
+### Service Blueprint
+
+The `service` blueprint has the responsibility to deploy the microservices (i.e. VNFs) to both clusters and configuring them properly.  It does this by exploiting a plugin that "proxies" the Kubernetes and Swarm blueprints as described earlier, and by using the Kubernetes and Swarm plugins to do the actual deployment.
+
+#### Deploying Quagga on Kubernetes
+
+Quagga is deployed on Kubernetes using a native Kubernetes descriptor.  For this example Quagga was only deployed to serve simple static routes.  As is typical with the Kubernetes plugin, a Kubernetes descriptor is referred to in the blueprint possibly with some overrides and environment variables that the container(s) can use to self configure.  One 
