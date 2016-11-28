@@ -43,7 +43,7 @@ The existing Docker Swarm cluster blueprint remains mostly unchanged except for 
 
 The `service` blueprint has the responsibility to deploy the microservices (i.e. VNFs) to both clusters and configuring them properly.  It does this by exploiting a plugin that "proxies" the Kubernetes and Swarm blueprints as described earlier, and by using the Kubernetes and Swarm plugins to do the actual deployment.
 
-#### Deploying Quagga on Kubernetes
+#### Orchestrating The Quagga Container on Kubernetes
 
 Quagga is deployed on Kubernetes using a native Kubernetes descriptor.  For this example Quagga was only deployed to serve simple static routes.  As is typical with the Kubernetes plugin, a Kubernetes descriptor is referred to in the blueprint possibly with some overrides and environment variables that the container(s) can use to self configure.  In this case, the Quagga router is seeded with some static routes created by examining the outputs of the deployment proxy for the Kubernetes deployment, and passing them in the environment to the container.
 
@@ -81,7 +81,7 @@ spec:
       labels:
         app: quagga
     spec:
-      __hostNetwork: true__
+      hostNetwork: true
       containers:
       - name: quagga
         image: dfilppi/quagga
@@ -91,7 +91,23 @@ spec:
         - containerPort: 2601
           hostIP: 0.0.0.0
         securityContext:
-          __privileged: true__
+          _privileged: true_
 ```
 
+The start script in the container takes care of populating the static routes and starting the router.  As a side note, it is assumed that ip forwarding is turned in the instance.
+
+#### Deploying and Configuring The Nginx Container
+
+The last piece of the puzzle is deploying the Nginx container.  The only significant configuration step is populating the load balance host list.  The approach is similar to that used in Kubernetes (passing config in environment variables), but the plugin is different.  Whereas the Kubernetes plugin uses native Kubernetes descriptors, the current version of the Swarm plugin does not handle the equivalent for Swarm (Docker Compose).  Instead, the configuration in the blueprint is more explicit, with the plugin defining `cloudify.swarm.Microservice`,`cloudify.swarm.Container`, and `cloudify.swarm.Port` types.  The microservice is loaded into the defined container, and the ports are exposed via relationships.  In this case, the container accepts the environment config and image reference.
+
+```yaml
+  nginx_container:
+    type: cloudify.swarm.Container
+    properties:
+      image: dfilppi/nginx2
+      entry_point: start.sh
+      env:
+        SERVERS: {get_attribute: [kubernetes_proxy,vm_info,ips]}
 ```
+
+Note how the `SERVERS` definition connects the dynamic outputs of the Kubernetes blueprint to the container configuration in the Swarm cluster.  That pattern of proxied, hybrid orchestration has application far from this esoteric use case.  It is similar to the approach taken in a previous orchestration that demonstrated scaling in Kubernetes triggered by activity on cloud [vms](http://getcloudify.org/2016/03/24/openstack-scaling-kubernetes-microservices-linux-containers-cloud-TOSCA-orchestration.html).
