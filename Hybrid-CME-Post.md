@@ -118,3 +118,7 @@ The last piece of the puzzle is deploying the Nginx container.  The only signifi
 ```
 
 Note how the `SERVERS` definition connects the dynamic outputs of the Kubernetes blueprint to the container configuration in the Swarm cluster.  That pattern of proxied, hybrid orchestration has application far from this esoteric use case.  It is similar to the approach taken in a previous orchestration that demonstrated scaling in Kubernetes triggered by activity on cloud [vms](http://getcloudify.org/2016/03/24/openstack-scaling-kubernetes-microservices-linux-containers-cloud-TOSCA-orchestration.html).
+
+## Conclusion
+
+This post demonstrated Cloudify orchestrating a service chain that spans multiple container management engines.  The reason is to show the flexibility of Cloudify in a "no-standard" world, where VNFs may be opinionated about the manager they run on.  In such a world, Cloudify can be used to orchestrate diverse platforms for the purpose of delivering end user solutions regardless of the Next Big Thing that may come along.  It also permits orchestration of legacy systems and hardware as needed, using a standard open model (TOSCA).  
