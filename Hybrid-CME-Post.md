@@ -5,7 +5,7 @@ The need to orchestrate virtual network functions that run in Linux hosted conta
 
 ### Target Architecture
 
-![Architecture]()
+![Architecture](https://github.com/dfilppi/posts/blob/master/images/hybrid-container-vnf/target.png)
 
 The architecture is composed of some familiar building blocks; the [Kubernetes blueprint](https://github.com/cloudify-examples/kubernetes-cluster-blueprint), the [Kubernetes plugin](https://github.com/cloudify-examples/cloudify-kubernetes-plugin), the [Docker Swarm Blueprint](https://github.com/cloudify-examples/docker-swarm-blueprint), and the [Deployment Proxy plugin](https://github.com/cloudify-examples/cloudify-proxy-plugin).  In addition, a yet to be published Docker Swarm plugin is used.
 
@@ -121,4 +121,4 @@ Note how the `SERVERS` definition connects the dynamic outputs of the Kubernetes
 
 ## Conclusion
 
-This post demonstrated Cloudify orchestrating a service chain that spans multiple container management engines.  The reason is to show the flexibility of Cloudify in a "no-standard" world, where VNFs may be opinionated about the manager they run on.  In such a world, Cloudify can be used to orchestrate diverse platforms for the purpose of delivering end user solutions regardless of the Next Big Thing that may come along.  It also permits orchestration of legacy systems and hardware as needed, using a standard open model (TOSCA).  
+This post demonstrated Cloudify orchestrating a service chain that spans multiple container management engines.  The reason is to show the flexibility of Cloudify in a "no-standard" world, where VNFs may be opinionated about the manager they run on.  In such a world, Cloudify can be used to orchestrate diverse platforms for the purpose of delivering end user solutions regardless of the Next Big Thing that may come along.  It also permits orchestration of legacy systems and hardware as needed, using a standard open model (TOSCA).  Source code for this example is forthcoming. 
