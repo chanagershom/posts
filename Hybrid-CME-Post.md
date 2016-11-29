@@ -39,6 +39,13 @@ Quagga operates by manipulating the Linux kernel routing tables.  Unprivileged c
 
 The existing Docker Swarm cluster blueprint remains mostly unchanged except for locating the cluster in the `10.100.100.0/24` network, as well as having an interface to the `10.100.101.0/24` network.  In the case of an Openstack platform, this would mean defining a Port node on the existing Kubernetes network, and defining a relationship between the instance and port.
 
+As we anticipate the final configuration, it should be noted that there is no routing rule on the Swarm hosts to send traffic bound for 1.100.102/24 to Quagga for routing.  There are a couple ways of handling this statically, but maybe the simplest is just adding a `userdata` section to add the route (assuming cloud infrastructure).  A bare metal setup might just use the Fabric plugin to add the rule remotely.  The `userdata` looks (paraphrasing) like:
+
+```yaml
+userdata: |
+  ip route add { get_input: [ quagga_net ] } via { get_input: [ quagga_host ] } dev eth1
+```
+
 ### Service Blueprint
 
 The `service` blueprint has the responsibility to deploy the microservices (i.e. VNFs) to both clusters and configuring them properly.  It does this by exploiting a plugin that "proxies" the Kubernetes and Swarm blueprints as described earlier, and by using the Kubernetes and Swarm plugins to do the actual deployment.
