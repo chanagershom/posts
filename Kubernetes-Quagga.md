@@ -97,7 +97,7 @@ Since no overrides are specified for the microservice, the Cloudify blueprint is
 ```yaml
     spec:
       hostNetwork: true
-      <b># ADD NODE SELECTOR</b>
+      &gt;b># ADD NODE SELECTOR</b>
       nodeSelector:
         role: router
       containers:
