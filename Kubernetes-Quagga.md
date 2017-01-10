@@ -45,3 +45,7 @@ done
 service quagga start
 tail -f /dev/null
 ```
+
+After the script runs, Quagga modifies the host routing tables.  This example only addressed static routing, which is the basis for the dynamic routing protocol implementation.
+
+### 
