@@ -1,4 +1,4 @@
-## Kubernetes Hosted VNFs, A Simple Example
+## Kubernetes Hosted VNF, A Simple Example
 
 An important use case for virtual network functions is using container technology rather than OS virtualization. The advantages of containerization include agility, performance, and density/efficiency.  Kubernetes (managing Docker containers) is the leading (and most capable) container management platform today, and the logical platform to use for technical exploration.  In this post, we'll explore a Cloudify orchestrated example of deploying a VNF as a microservice in Kubernetes.
 
@@ -29,3 +29,19 @@ Docker containers (on Linux) typically run in their own network namespace.  In p
          - name: ROUTES
            value: 10.0.0.0/24 172.16.0.1,10.10.0.0/24 172.16.0.1
 ``` 
+
+Beyond networking configuration, the initial configuration of static routes needs to be addressed.  Note the `command` property in the preceding excerpt. This identifies the `start.sh` script as the startup command for the container.  This example uses environment variables, defined in the `env` section, to configure initial static routes by updating the Quagga configuration file and starting the Quagga service.
+
+```bash
+IFS=","
+for I in $INTERFACES
+do
+  echo "interface $I" >> /etc/quagga/zebra.conf
+done
+for R in $ROUTES
+do
+  echo "ip route $R" >> /etc/quagga/zebra.conf
+done
+service quagga start
+tail -f /dev/null
+```
