@@ -48,4 +48,46 @@ tail -f /dev/null
 
 After the script runs, Quagga modifies the host routing tables.  This example only addressed static routing, which is the basis for the dynamic routing protocol implementation.
 
-### 
+### Placement
+
+A multi-node Kubernetes deployment is likely to want to constrain the location of the router in the cluster to access multiple interfaces.  Kubernetes permits the labeling of nodes in a cluster with arbitrary values, and then requesting the placement algorithm to filter candidates based on the labels.  This is one area Cloudify can provide value as part of the Kubernetes installation.  See the [Kubernetes example blueprint](https://github.com/cloudify-examples/kubernetes-cluster-blueprint) for a sample Cloudify orchestration.  A simple extension to the schema and some additional logic can provide the needed functionality.  The addition of a `labels` input to the `start.py` script for the kubernetes node provides the labels:
+
+```yaml
+      cloudify.interfaces.lifecycle:
+        start:
+          implementation: scripts/kubernetes/node/start.py
+          inputs:
+            <<: *kubernetes_environment
+            # ADDED LABELS INPUT
+            labels:
+              - role: router
+```
+
+Naturally, the `start.py` script needs to be modified to add the `--labels` parameter for the `hyperkube` startup.  Once done, Kubernetes is ready to filter once started.
+
+# The Router Microservice Definition
+
+A separate Cloudify blueprint from the blueprint that started Kubernetes can be used to model the Quagga router.  The blueprint is small enough to include:
+
+```yaml
+node_templates:
+
+  kubernetes_proxy:
+    type: cloudify.nodes.DeploymentProxy
+    properties:
+      inherit_outputs:
+        - 'kubernetes_info'
+....
+
+  quagga:
+    type: cloudify.kubernetes.Microservice
+    properties:
+      name: nginx
+      ssh_username: ubuntu
+      ssh_keyfilename: /root/.ssh/agent_key.pem
+      config_files:
+        - file: resources/kubernetes/pod.yaml
+    relationships:
+      - type: cloudify.kubernetes.relationships.connected_to_master
+        target: kubernetes_proxy
+```
