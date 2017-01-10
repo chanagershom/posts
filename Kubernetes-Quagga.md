@@ -15,7 +15,7 @@ Docker containers (on Linux) typically run in their own network namespace.  In p
       hostNetwork: true
       containers:
       - name: quagga
-        image: dfilppi/quagga5
+        image: quagga
         workingDir: /root
         command: ["bash","/root/start.sh"]
         ports:
@@ -65,7 +65,7 @@ A multi-node Kubernetes deployment is likely to want to constrain the location o
 
 Naturally, the `start.py` script needs to be modified to add the `--labels` parameter for the `hyperkube` startup.  Once done, Kubernetes is ready to filter once started.
 
-# The Router Microservice Definition
+### The Router Microservice Definition
 
 A separate Cloudify blueprint from the blueprint that started Kubernetes can be used to model the Quagga router.  The blueprint is small enough to include:
 
@@ -92,7 +92,7 @@ node_templates:
         target: kubernetes_proxy
 ```
 
-Since no overrides are specified for the microservice, the Cloudify blueprint is fairly trivial.  It identifies the Kubernetes master node and `pod.yaml` file (excerpt at the beginning of the post), as well as ssh information for logging into the Kubernetes.  The reason the login information is needed is this sample implementation relies on the `kubectl` command line tool on the master.  The only additional modification needed for placement is to the `pod.yaml` file to target the router node.
+Since no overrides are specified for the microservice, the Cloudify blueprint is fairly trivial.  It identifies the Kubernetes master node and `pod.yaml` file (excerpt at the beginning of the post), as well as ssh information for logging into the Kubernetes.  The reason the login information is needed is this sample implementation relies on the `kubectl` command line tool on the master.  The only additional modification needed for placement is to the `pod.yaml` file to target the router node:
 
 ```yaml
     spec:
@@ -102,7 +102,11 @@ Since no overrides are specified for the microservice, the Cloudify blueprint is
         role: router
       containers:
       - name: quagga
-        image: dfilppi/quagga5
+        image: quagga
         workingDir: /root
 ....
 ```
+
+## Conclusion
+
+Kubernetes, Docker, and Cloudify work together seamlessly to create a containerized VNF platform that can deliver high availability, high performance, and high density, while retaining the benefits of a micrservices architecture.
