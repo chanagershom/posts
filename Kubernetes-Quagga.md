@@ -91,3 +91,18 @@ node_templates:
       - type: cloudify.kubernetes.relationships.connected_to_master
         target: kubernetes_proxy
 ```
+
+Since no overrides are specified for the microservice, the Cloudify blueprint is fairly trivial.  It identifies the Kubernetes master node and `pod.yaml` file (excerpt at the beginning of the post), as well as ssh information for logging into the Kubernetes.  The reason the login information is needed is this sample implementation relies on the `kubectl` command line tool on the master.  The only additional modification needed for placement is to the `pod.yaml` file to target the router node.
+
+```yaml
+    spec:
+      hostNetwork: true
+      # ADD NODE SELECTOR
+      nodeSelector:
+        role: router
+      containers:
+      - name: quagga
+        image: dfilppi/quagga5
+        workingDir: /root
+....
+```
