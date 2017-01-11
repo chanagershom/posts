@@ -1,5 +1,5 @@
-<p align=center>
-![](https://github.com/dfilppi/posts/blob/master/images/kub-quagga/quagga.jpg)
+<p align="center">
+![alt](https://github.com/dfilppi/posts/blob/master/images/kub-quagga/quagga.jpg)
 </p>
 ## Orchestrating a Kubernetes Managed Virtual Network Function
 
