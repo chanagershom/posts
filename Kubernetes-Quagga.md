@@ -1,6 +1,6 @@
-<p align="center">
+<div align="center">
 ![alt](https://github.com/dfilppi/posts/blob/master/images/kub-quagga/quagga.jpg)
-</p>
+</div>
 ## Orchestrating a Kubernetes Managed Virtual Network Function
 
 An important use case for virtual network functions is using container technology rather than OS virtualization. The advantages of containerization include agility, performance, and density/efficiency.  Kubernetes (managing Docker containers) is the leading (and most capable) container management platform today, and the logical platform to use for technical exploration.  In this post, we'll explore a Cloudify orchestrated example of deploying a VNF as a microservice in Kubernetes.
