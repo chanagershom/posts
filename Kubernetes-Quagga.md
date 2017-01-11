@@ -1,5 +1,4 @@
 <div align="center">
-![alt](https://github.com/dfilppi/posts/blob/master/images/kub-quagga/quagga.jpg)
 <img src=https://github.com/dfilppi/posts/blob/master/images/kub-quagga/quagga.jpg>
 </div>
 ## Orchestrating a Kubernetes Managed Virtual Network Function
