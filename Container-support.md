@@ -1,4 +1,4 @@
-### A Guide To Cloudify Linux Container Support
+### A Guide To Cloudify Docker Container Support
 
 ## Overview
 
