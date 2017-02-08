@@ -10,11 +10,21 @@ The [Docker plugin](https://github.com/cloudify-cosmo/cloudify-docker-plugin) is
 
 ## Docker Swarm Blueprint
 
+The [Docker Swarm blueprint](https://github.com/cloudify-examples/docker-swarm-blueprint) creates and manages a Docker Swarm cluster on Openstack.  
+
 ## Docker Swarm Plugin
 
+The [Docker Swarm Plugin](https://github.com/cloudify-examples/cloudify-swarm-plugin) provides support for deploying services onto [Docker Swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/) clusters, as well as support for [Docker Compose](https://docs.docker.com/compose/overview/).
 ## Kubernetes Blueprint
 
 ## Kubernetes Plugin
 
+The [Kubernetes Plugin](https://github.com/cloudify-examples/cloudify-kubernetes-plugin) provides support for deploying services on [Kubernetes](https://kubernetes.io/docs/) clusters.
+
+## Kubernetes Blueprint
+
+The [Kubernetes Blueprint](https://github.com/cloudify-examples/kubernetes-cluster-blueprint) creates and manages a [Kubernetes](https://kubernetes.io/docs/) cluster on Openstack and Amazon EC2.
+
 ## Mesos Blueprint
 
+The [Mesos](TBD) creates and manages [Mesos](http://mesos.apache.org/) clusters on Openstack.
