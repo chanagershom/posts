@@ -45,6 +45,9 @@ The `cloudify.interfaces.lifecycle` interface is implemented, and supports the f
                 stop function.
 * * `retry_interval` If Exited is not in the container status, then the plugin will retry. This is
                 the number of seconds between retries.
+* `delete` inputs:
+ * `params` A dictionary of parameters allowed by docker-py to the
+                remove_container function.
 
 ## Docker Swarm Blueprint
 
