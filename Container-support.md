@@ -22,7 +22,29 @@ The [Docker plugin](https://github.com/cloudify-cosmo/cloudify-docker-plugin) is
 * `name` The name of the Docker container. This will also be the host name in Docker
           host config.
 * `use_external_resource` Boolean indicating whether the container already exists or not.
-* 
+
+##### Interfaces:
+
+The `cloudify.interfaces.lifecycle` interface is implemented, and supports the following function parameters
+
+* `create` inputs:
+* * `params` A dict of parameters allowed by docker-py to the
+                create_container function
+* `start` inputs:
+* * `params` A dictionary of parameters allowed by docker-py to the
+                start function
+* * `processes_to_wait_for` A list of processes to verify are active on the container
+                before completing the start operation. If all processes are not active
+                the function will be retried.
+* * `retry_interval` Before finishing start checks to see that all processes
+                on the container a                A dictionary of parameters allowed by docker-py to the
+                stop function.re ready. This is the interval between
+                checks.
+* `stop` inputs:
+* * `params` A dictionary of parameters allowed by docker-py to the
+                stop function.
+* * `retry_interval` If Exited is not in the container status, then the plugin will retry. This is
+                the number of seconds between retries.
 
 ## Docker Swarm Blueprint
 
