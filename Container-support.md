@@ -6,7 +6,7 @@ Cloudify supports integrations with Docker and Docker-based container managers, 
 
 ## Docker Plugin
 
-The [Docker plugin](https://github.com/cloudify-cosmo/cloudify-docker-plugin) is a Cloudify plugin that defines a single type: `cloudify.docker.Container`.  The plugin is compatible with Docker 1.0 (API version 1.12).  The plugin executes on a computer host that has Docker pre-installed.  
+The [Docker plugin](https://github.com/cloudify-cosmo/cloudify-docker-plugin) is a Cloudify plugin that defines a single type: `cloudify.docker.Container`.  The plugin is compatible with Docker 1.0 (API version 1.12) and relies on the [docker-py](https://github.com/docker/docker-py) library.  The plugin executes on a computer host that has Docker pre-installed.  
 
 ### Types
 
@@ -19,6 +19,10 @@ The [Docker plugin](https://github.com/cloudify-cosmo/cloudify-docker-plugin) is
           an image from docker hub, do not use src. The key is repository. The value is that
           repository name. You may additionally specify the tag, if none is given,
           latest is assumed.
+* `name` The name of the Docker container. This will also be the host name in Docker
+          host config.
+* `use_external_resource` Boolean indicating whether the container already exists or not.
+* 
 
 ## Docker Swarm Blueprint
 
