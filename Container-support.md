@@ -51,11 +51,20 @@ The `cloudify.interfaces.lifecycle` interface is implemented, and supports the f
 
 ## Docker Swarm Blueprint
 
-The [Docker Swarm blueprint](https://github.com/cloudify-examples/docker-swarm-blueprint) creates and manages a Docker Swarm cluster on Openstack.  
+The [Docker Swarm blueprint](https://github.com/cloudify-examples/docker-swarm-blueprint) creates and manages a Docker Swarm cluster on Openstack.  There are 3 blueprints, with slightly different use cases:
+
+* swarm-local-blueprint.yaml : a cfy local blueprint that orchestrates setup and teardown of the cluster without a manager
+* swarm-openstack-blueprint.yaml : an Openstack blueprint that orchestrates setup and teardown of the cluster with a manager
+* swarm-scale-blueprint.yaml : an Openstack blueprint that orchestrates setup, teardown, autohealing, and autoscaling of the cluster
+
+### Prerequisites
+
+These blueprints have only been tested against an Ubuntu 14.04 image with 2GB of RAM. The image used must be pre-installed with Docker 1.12. Any image used should have passwordless ssh, and passwordless sudo with requiretty false or commented out in sudoers. Also required is an Openstack cloud environment. The blueprints were tested on Openstack Kilo.
 
 ## Docker Swarm Plugin
 
 The [Docker Swarm Plugin](https://github.com/cloudify-examples/cloudify-swarm-plugin) provides support for deploying services onto [Docker Swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/) clusters, as well as support for [Docker Compose](https://docs.docker.com/compose/overview/).
+
 ## Kubernetes Blueprint
 
 ## Kubernetes Plugin
