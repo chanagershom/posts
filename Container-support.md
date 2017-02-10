@@ -188,6 +188,64 @@ To tweak the scaling behavior, the groups are defined in the individual cloud sp
 
 The [Kubernetes Plugin](https://github.com/cloudify-examples/cloudify-kubernetes-plugin) provides support for deploying services on [Kubernetes](https://kubernetes.io/docs/) clusters.
 
+### Types
+
+#### cloudify.kubernetes.Master
+
+deprecated
+
+#### cloudify.kubernetes.Node
+
+deprecated
+
+#### cloudify.kubernetes.MicroService
+The `cloudify.kubernetes.MicroService` type deploys and undeploys Kubernetes services to a Kubernetes cluster.  It provides options for specifying service configuration with TOSCA properties and embedded or external native Kubernetes service descriptors.
+
+##### Properties (non-native definition)
+* `name` service name
+* `image` image name
+* `port` service listening port
+* `target_port`	container port (default:port)
+* `protocol` TCP/UDP (default TCP)
+* `replicas` number of replicas (default 1)
+* `run_overrides` json overrides for kubectl "run"
+* `expose_overrides` json overrides for kubectl "expose"
+
+##### Properties (embedded native)
+* `config` a dict whose children can be native Kubernetes descriptor YAML
+
+##### Properties (external native)
+
+* `config_files` a dict with keys
+ * `file` a Kubernetes descriptor file (e.g. pod.yaml)
+ * `overrides` a list of substitutions to perform on the pod.yaml file (see below).
+
+### Override Syntax
+When configuring with external files, the files require no change to be used with Cloudify, but can be modified by means of "overrides", which can insert blueprint values dynamically.  The target file is parsed into a Python datastructure (dict of dicts and lists).  To understand how the substitutions work, consider this pod.yaml snippet:
+
+```yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nodecellar
+spec:
+  replicas: 2
+
+```
+Now imagine I wish for some reason to change the number of replicas to 3.  The "overrides" line in the blueprint would look like this:
+
+`['spec']['replicas']=3`
+
+Internally, the plugin simply evaluates this statement on the parsed data structure.  After all substitutions are done, a new `pod.yaml` is written to perform the actual deployment on the master node via `kubectl`.  The value type of the substitution line is a string, so standard intrinsics like `concat` and `get_property` can be used to insert properties from elsewhere in blueprints.
+
+#### Special Substitution Syntax
+Sometimes it is desirable to inject runtime properties or information from the cloudify context.  To enable this, the plugin implements a special syntax.
+
+##### Runtime Properties @{}
+To insert runtime properties as values of substitutions, use the `@{}` syntax.  It takes two arguments; a node name and a property name.  For example, if I need to inject a dynamically discovered port from another node, you could use something like `[some][path]=@{target_node,discovered_port}`.
+
+##### Cloudify Context %{}
+To insert values from the cloudify [context](http://cloudify-plugins-common.readthedocs.io/en/3.3/context.html), use the `%{}` syntax.  It takes a single argument; a path in the Cloudify node context object.  For example, to insert the node id of the service, you could use something like `[some][path]=${node.id}`.  This is equivalent to evaluating `ctx.node.id` in plugin code.
 
 ## Mesos Blueprint
 
