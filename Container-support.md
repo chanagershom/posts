@@ -64,6 +64,21 @@ These blueprints have only been tested against an Ubuntu 14.04 image with 2GB of
 ### Usage
 
 #### swarm-local-blueprint.yaml
+##### Overview
+The `swarm-local` blueprint is intended to be run using the [cfy local](http://docs.getcloudify.org/3.4.1/cli/local/) CLI command.  As such, no manager is necessary.  The blueprint starts a two node Swarm cluster and related networking infrastructure in Openstack.
+##### Inputs
+* `image` The Openstack image id.  This image will be used for both master and worker nodes.  This image must be prepared with Docker 1.12, as well as support passwordless ssh, passwordless sudo, and passwordless sudo over ssh.  Only Ubuntu 14.04 images have been tested.
+* `flavor` The Openstack flavor id.  This flavor will be used for both master and worker nodes.  2 GB RAM flavors and 20 GB disk are adequate.  Flavor size will vary based on application needs.
+* `ssh_user` This blueprint uses the [Fabric plugin](http://docs.getcloudify.org/3.4.1/plugins/fabric/) and so requires ssh credentials.
+* `ssh_keyname` The Openstack ssh key to attach to the compute nodes (both master and worker).
+* `ssh_keyfile` This blueprint uses the [Fabric plugin](http://docs.getcloudify.org/3.4.1/plugins/fabric/) and so requires ssh credentials.
+
+##### Other Configuration
+The blueprint contains a `dsl_definitions` block to specify the Openstack credentials:  
+* `username` The Openstack user name
+* `password` The Openstack password
+* `tenant_name` The Openstack tenant
+* `auth_url` The Openstack Keystone URL
 
 #### swarm-openstack-blueprint.yaml
 
