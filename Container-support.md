@@ -174,6 +174,16 @@ The [Kubernetes Cluster Blueprint](https://github.com/cloudify-examples/kubernet
 
 ### Outputs
 
+#### AWS
+* A single output `Kubernetes_Dashboard` with a dict value with a single key `url`.  URL uses the floating IP allocated to point to the Kubernetes dashboard.
+
+#### Openstack
+* A single output `kubernetes_info` with a dict value with a single key `url`.  URL uses the floating IP allocated to point to the Kubernetes dashboard.
+
+### Other Configuration
+
+To tweak the scaling behavior, the groups are defined in the individual cloud specific imports for [AWS](https://github.com/cloudify-examples/kubernetes-cluster-blueprint/blob/master/imports/aws/blueprint.yaml) and [Openstack](https://github.com/cloudify-examples/kubernetes-cluster-blueprint/blob/master/imports/openstack/blueprint.yaml).  Both sub-blueprints refer to a custom scaling policy [type](https://github.com/cloudify-examples/kubernetes-cluster-blueprint/blob/master/imports/scale.yaml).  The type definition documents how the scaling parameters can be tweaked for desired effects.  The heal group uses the built in [host failure policy](http://docs.getcloudify.org/3.4.1/manager_policies/built-in-policies/) which is triggered by named metrics expiring (60 seconds).
+
 ## Kubernetes Plugin
 
 The [Kubernetes Plugin](https://github.com/cloudify-examples/cloudify-kubernetes-plugin) provides support for deploying services on [Kubernetes](https://kubernetes.io/docs/) clusters.
