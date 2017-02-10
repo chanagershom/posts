@@ -88,6 +88,25 @@ The blueprint contains a `dsl_definitions` block to specify the Openstack creden
 
 The [Docker Swarm Plugin](https://github.com/cloudify-examples/cloudify-swarm-plugin) provides support for deploying services onto [Docker Swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/) clusters, as well as support for [Docker Compose](https://docs.docker.com/compose/overview/).
 
+### Types
+
+#### cloudify.swarm.Manager
+##### Overview
+A type that represents a Swarm manager not managed by Cloudify.  If a Cloudify managed manager is used, the [Cloudify proxy plugin](https://github.com/cloudify-examples/cloudify-proxy-plugin) should be used instead.
+##### Properties
+* `ip` The IPV4 address of the Swarm manager
+* `port` The port the manager REST API is listening on (default 2375)
+* `ssh_user` An ssh user for operations that require ssh (Docker Compose)
+* `ssh_keyfile` An ssh private key for operations that require ssh (Docker Compose)
+
+#### cloudify.swarm.Microservice
+##### Overview
+The `cloudify.swarm.Microservice` type represents a Docker Swarm service.  It can be configured to use TOSCA-style properties or point to an external Swarm yaml descriptor.
+
+##### Properties
+* `compose_file` The path to a Docker compose descriptor file.  If set, all other properties are ignored.
+* all other properties are translated into the Docker REST [service create ](https://docs.docker.com/v1.12/engine/reference/api/docker_remote_api_v1.24#create-a-service) API call.  Properties in the blueprint are encoded with underscores between words (e.g. `log_driver`) and converted internally to the REST API body camel case (e.g. `LogDriver`).  See comments in the [plugin.yaml](https://github.com/cloudify-examples/cloudify-swarm-plugin/blob/master/plugin.yaml) for an extensive example.
+
 ## Kubernetes Blueprint
 
 ## Kubernetes Plugin
