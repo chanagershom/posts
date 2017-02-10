@@ -61,6 +61,14 @@ The [Docker Swarm blueprint](https://github.com/cloudify-examples/docker-swarm-b
 
 These blueprints have only been tested against an Ubuntu 14.04 image with 2GB of RAM. The image used must be pre-installed with Docker 1.12. Any image used should have passwordless ssh, and passwordless sudo with requiretty false or commented out in sudoers. Also required is an Openstack cloud environment. The blueprints were tested on Openstack Kilo.
 
+### Usage
+
+#### swarm-local-blueprint.yaml
+
+#### swarm-openstack-blueprint.yaml
+
+#### swarm-scale-blueprint.yaml
+
 ## Docker Swarm Plugin
 
 The [Docker Swarm Plugin](https://github.com/cloudify-examples/cloudify-swarm-plugin) provides support for deploying services onto [Docker Swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/) clusters, as well as support for [Docker Compose](https://docs.docker.com/compose/overview/).
