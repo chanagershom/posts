@@ -64,9 +64,13 @@ These blueprints have only been tested against an Ubuntu 14.04 image with 2GB of
 ### Usage
 
 #### swarm-local-blueprint.yaml
+
 ##### Overview
+
 The `swarm-local` blueprint is intended to be run using the [cfy local](http://docs.getcloudify.org/3.4.1/cli/local/) CLI command.  As such, no manager is necessary.  The blueprint starts a two node Swarm cluster and related networking infrastructure in Openstack.
+
 ##### Inputs
+
 * `image` The Openstack image id.  This image will be used for both master and worker nodes.  This image must be prepared with Docker 1.12, as well as support passwordless ssh, passwordless sudo, and passwordless sudo over ssh.  Only Ubuntu 14.04 images have been tested.
 * `flavor` The Openstack flavor id.  This flavor will be used for both master and worker nodes.  2 GB RAM flavors and 20 GB disk are adequate.  Flavor size will vary based on application needs.
 * `ssh_user` This blueprint uses the [Fabric plugin](http://docs.getcloudify.org/3.4.1/plugins/fabric/) and so requires ssh credentials.
@@ -74,6 +78,7 @@ The `swarm-local` blueprint is intended to be run using the [cfy local](http://d
 * `ssh_keyfile` This blueprint uses the [Fabric plugin](http://docs.getcloudify.org/3.4.1/plugins/fabric/) and so requires ssh credentials.
 
 ##### Other Configuration
+
 The blueprint contains a `dsl_definitions` block to specify the Openstack credentials:  
 * `username` The Openstack user name
 * `password` The Openstack password
@@ -81,7 +86,9 @@ The blueprint contains a `dsl_definitions` block to specify the Openstack creden
 * `auth_url` The Openstack Keystone URL
 
 #### swarm-openstack-blueprint.yaml
+
 ##### Overview
+
 The [swarm-openstack-blueprint.yaml](https://github.com/cloudify-examples/docker-swarm-blueprint/blob/master/swarm-openstack-blueprint.yaml) is a Cloudify manager hosted blueprint that starts a Swarm cluster and related networking infrastucture.
 
 ##### Inputs
@@ -89,12 +96,14 @@ The [swarm-openstack-blueprint.yaml](https://github.com/cloudify-examples/docker
 * `flavor` The Openstack flavor id.  This flavor will be used for both master and worker nodes.  2 GB RAM flavors and 20 GB disk are adequate.  Flavor size will vary based on application needs.
 * `ssh_user` This blueprint uses the [Fabric plugin](http://docs.getcloudify.org/3.4.1/plugins/fabric/) and so requires ssh credentials.
 * `agent_user` The user for the image.
+
 ##### Outputs
 * `swarm-info` which is a dict with two keys:
  * `manager_ip` the public IP address allocated to the Swarm manager
  * `manager_port` the port the manager listens on
 
 #### swarm-scale-blueprint.yaml
+
 ##### Overview
 The [swarm-scale-blueprint.yaml](https://github.com/cloudify-examples/docker-swarm-blueprint/blob/master/swarm-openstack-blueprint.yaml) is a Cloudify manager hosted blueprint that starts a Swarm cluster and related networking infrastucture.  It installs metrics collectors on worker nodes, and defines scaling and healing groups for cluster high availability.
 
@@ -103,6 +112,7 @@ The [swarm-scale-blueprint.yaml](https://github.com/cloudify-examples/docker-swa
 * `flavor` The Openstack flavor id.  This flavor will be used for both master and worker nodes.  2 GB RAM flavors and 20 GB disk are adequate.  Flavor size will vary based on application needs.
 * `ssh_user` This blueprint uses the [Fabric plugin](http://docs.getcloudify.org/3.4.1/plugins/fabric/) and so requires ssh credentials.
 * `agent_user` The user for the image.
+
 ##### Outputs
 * `swarm-info` which is a dict with two keys:
  * `manager_ip` the public IP address allocated to the Swarm manager
