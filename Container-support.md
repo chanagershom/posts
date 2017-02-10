@@ -163,6 +163,14 @@ The [Kubernetes Cluster Blueprint](https://github.com/cloudify-examples/kubernet
 * `ec2_region_endpoint` The EC2 region. Default = ec2.us-east-1.amazonaws.com
 
 ### Inputs (Openstack)
+* `keystone_username` Openstack user name
+* 'keystone_password` Openstack password
+* `keystone_tenant_name` Openstack tenant
+* `keystone_url` Openstack authentication URL
+* `region` Openstack region (optional)
+* `nova_url` Openstack Nova compute API URL (optional)
+* `neutron_url` Openstack Neutron network API URL (optional)
+* `openstack_management_network_name` The Cloudify management network name (optional)
 
 ### Outputs
 
