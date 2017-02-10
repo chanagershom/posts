@@ -145,15 +145,31 @@ The `cloudify.swarm.Microservice` type represents a Docker Swarm service.  It ca
 
 * `cloudify.swarm.relationships.microservice_contained_in_manager` This relationship connects a Microservice to a manager.  The implementation allows the target to be either a `cloudify.swarm.Manager` type or a `cloudify.nodes.DeploymentProxy` type.
 
-## Kubernetes Blueprint
+## Kubernetes Cluster Blueprint
+
+The [Kubernetes Cluster Blueprint](https://github.com/cloudify-examples/kubernetes-cluster-blueprint) creates and manages a [Kubernetes](https://kubernetes.io/docs/) cluster on Openstack and Amazon EC2.  It uses the [containerized version of Kubernetes](https://kubernetes.io/docs/getting-started-guides/docker-multinode) to create the cluster.  It also installs the Kubernetes dashboard and the `kubectl` utility on the master.  By default, the blueprint is configured to install on AWS.  To switch to Openstack, edit the [blueprint file](https://github.com/cloudify-examples/kubernetes-cluster-blueprint/blob/master/kubernetes-blueprint.yaml) and comment out the line `- imports/aws/blueprint.yaml`.  Then uncomment the line below.
+
+### Inputs (Common)
+* `your_kubernetes_version` The version of Kubernetes to use.  Default = 1.2.1.
+* `your_etcd_version` The version of Etcd to use. Default = 2.2.1.
+* `your_flannel_version` The version of Flannel to use.  Default = 0.5.5
+* `flannel_interface` The interface to bind flannel to.  Default = eth0
+* `flannel_ipmasq_flag`  Whether to flannel should use IP Masquerading.  Default = true
+
+### Inputs (AWS)
+* `aws_access_key_id` The AWS access key
+* `aws_secret_access_key` The AWS secret key
+* `ec2_region_name` The EC2 region name.  Default = us-east-1
+* `ec2_region_endpoint` The EC2 region. Default = ec2.us-east-1.amazonaws.com
+
+### Inputs (Openstack)
+
+### Outputs
 
 ## Kubernetes Plugin
 
 The [Kubernetes Plugin](https://github.com/cloudify-examples/cloudify-kubernetes-plugin) provides support for deploying services on [Kubernetes](https://kubernetes.io/docs/) clusters.
 
-## Kubernetes Blueprint
-
-The [Kubernetes Blueprint](https://github.com/cloudify-examples/kubernetes-cluster-blueprint) creates and manages a [Kubernetes](https://kubernetes.io/docs/) cluster on Openstack and Amazon EC2.
 
 ## Mesos Blueprint
 
