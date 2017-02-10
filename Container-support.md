@@ -107,6 +107,10 @@ The `cloudify.swarm.Microservice` type represents a Docker Swarm service.  It ca
 * `compose_file` The path to a Docker compose descriptor file.  If set, all other properties are ignored.
 * all other properties are translated into the Docker REST [service create ](https://docs.docker.com/v1.12/engine/reference/api/docker_remote_api_v1.24#create-a-service) API call.  Properties in the blueprint are encoded with underscores between words (e.g. `log_driver`) and converted internally to the REST API body camel case (e.g. `LogDriver`).  See comments in the [plugin.yaml](https://github.com/cloudify-examples/cloudify-swarm-plugin/blob/master/plugin.yaml) for an extensive example.
 
+##### Relationships
+
+* `cloudify.swarm.relationships.microservice_contained_in_manager` This relationship connects a Microservice to a manager.  The implementation allows the target to be either a `cloudify.swarm.Manager` type or a `cloudify.nodes.DeploymentProxy` type.
+
 ## Kubernetes Blueprint
 
 ## Kubernetes Plugin
