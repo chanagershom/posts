@@ -2,7 +2,7 @@
 
 ## Overview
 
-Cloudify supports integrations with Docker and Docker-based container managers, including Docker, Docker Swarm, Docker Compose, Kubernetes, and Apache Mesos.  At a minimum, Cloudify supports the creation, scaling, and healing of the platforms themselves.  For Kubernetes and Docker Swarm, service orchestration is also supported.  When orchestrating other orchestrators (e.g. Kubernetes, Swarm, Mesos), the Cloudify philosophy is to lightly integrate so that native descriptors can be used if desired.  Options are also provided to use TOSCA based configuration for services, but support is more limited than native descriptors.
+Cloudify supports integrations with Docker and Docker-based container managers, including Docker, Docker Swarm, Docker Compose, Kubernetes, and Apache Mesos.  Cloudify can both manage container infrastructure, and/or orchestrate the services that run on container platforms.  When orchestrating container orchestrators such as Kubernetes, Docker Swarm, and Mesos), Cloudify provides infrastructure management capabilities such as installation, auto healing and scaling.  When orchestrating services on these platforms, Cloudify integrates seamlessly with native descriptors to not only support container cluster service deployment, but also to enable orchestrations that encompass systems beyond the edges of the container cluster.
 
 ## Docker Plugin
 
@@ -249,4 +249,19 @@ To insert values from the cloudify [context](http://cloudify-plugins-common.read
 
 ## Mesos Blueprint
 
-The [Mesos](TBD) creates and manages [Mesos](http://mesos.apache.org/) clusters on Openstack.
+The [Mesos blueprint](https://github.com/cloudify-examples/mesos-blueprint) creates and manages [Mesos](http://mesos.apache.org/) clusters on Openstack.  It is a Cloudify manager hosted blueprint that starts a Mesos cluster and related networking infrastructure.  It installs metrics collectors on slave nodes, and defines scaling and healing groups for cluster high availability.
+
+### Image Preparation
+
+The Mesos blueprint includes a secondary blueprint to aid in the creation of Cloudify compatible images on Openstack.  The image preparation blueprint is located in the `util` directory.  In the `util/imports/openstack/blueprint.yaml`, fill in the inputs and Openstack configuration.  When done, run the `create_image.sh` script.  When complete, save a snapshot of the created image and use it as a base image for the Mesos blueprint.  For more details, see the [README](https://github.com/cloudify-examples/mesos-blueprint/blob/master/README.md).
+
+### Mesos Blueprint Operation
+
+#### Inputs
+* `image` The Openstack image id.  Ideally this image is created by the `Image Creation` process described previously. If not, the image must be an Ubuntu 14.04 OS prepared to allow passwordless ssh, passwordless sudo, passwordless sudo over ssh, Docker, and Mesos installed.  You can also run the [image creation script](https://github.com/cloudify-examples/mesos-blueprint/blob/master/util/scripts/ubuntu14.sh) manually to prepare the image.
+* `flavor` The Openstack flavor id.  This flavor will be used for all instances.  2 GB RAM flavors and 20 GB disk are adequate.  Flavor size will vary based on application needs.
+* `agent_user` The user for the image.  Should be 'ubuntu'.
+
+#### Outputs
+* `mesos_ip` The public IP of the master server
+* `mesos_ui` The URL of the Mesos dashboard
