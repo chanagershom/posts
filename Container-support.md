@@ -10,6 +10,8 @@ Cloudify can be used to create, heal, scale, and tear down container clusters.  
 
 ![](https://github.com/dfilppi/posts/blob/master/images/container-manual/infrastructure-orch.png)
 
+Cloudify can also orchestrate related infrastructure on bare metal, virtualized, and cloud platforms.  This can include networking and storage infrastructure, both virtual and physical.
+
 # Service Orchestration
 
 ## Docker Plugin
