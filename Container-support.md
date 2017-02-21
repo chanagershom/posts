@@ -8,6 +8,8 @@ Cloudify supports integrations with Docker and Docker-based container managers, 
 
 Cloudify can be used to create, heal, scale, and tear down container clusters.  This capability is key in providing a scalable and highly available infrastructure on which container managers can run.  
 
+![](https://github.com/dfilppi/posts/blob/master/images/container-manual/infrastructure-orch.png)
+
 # Service Orchestration
 
 ## Docker Plugin
