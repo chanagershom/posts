@@ -14,6 +14,10 @@ Cloudify can also orchestrate related infrastructure on bare metal, virtualized,
 
 # Service Orchestration
 
+Independently from the orchestration of infrastructure, Cloudify provides the ability to orchestrate heterogenous services across platforms.  By leveraging the strength of TOSCA modeling, Cloudify can manage the instantiation and configuration of service chains regardless of the target platform.  This ranges from containerized, to virtualized, to "bare metal" OS, to physical hardware.
+
+![](https://github.com/dfilppi/posts/blob/master/images/container-manual/services-orch.png)
+
 ## Docker Plugin
 
 The [Docker plugin](https://github.com/cloudify-cosmo/cloudify-docker-plugin) is a Cloudify plugin that defines a single type: `cloudify.docker.Container`.  The plugin is compatible with Docker 1.0 (API version 1.12) and relies on the [docker-py](https://github.com/docker/docker-py) library.  The plugin executes on a computer host that has Docker pre-installed.  
