@@ -1,4 +1,4 @@
-<img src="https://github.com/dfilppi/posts/blob/master/images/kub-bare/bare.png" width="400px" align="center"/>
+<img src="https://github.com/dfilppi/posts/blob/master/images/kub-bare/bare.png" width="320px" align="center"/>
 
 ## Orchestrating Kubernetes on Bare Metal
 
@@ -26,18 +26,43 @@ hosts:
   - name: server0
     credentials:
       key_file: keys/key.pem
+      username: centos
     endpoint:
       ip: 52.29.45.36
+    tags:
+      - centos
+      - large
     
   - name: server1
     credentials:
       key_file: keys/key.pem
     endpoint:
       ip: 52.58.54.251
+    tags:
+      - ubuntu
+      - medium
 
   - name: server2
     credentials:
       key_file: keys/key.pem
     endpoint:
       ip: 52.58.68.85
+    tags:
+      - ubuntu
+      - medium
 ```
+
+This descriptor is consumed by the host pool service and represents the initial configuration.  Bear in mind that the configuration isn't static, and can be amended and updated via REST API.  In a blueprint, utilizing the host pool plugin, a hosts can be requested from the pool.  The resulting host pool can be treated like any other compute resource for the purposes of orchestration.
+
+```yaml
+node_templates:
+...
+  node1:
+    type: cloudify.hostpool.nodes.LinuxHost
+    properties:
+      filters:
+        tags:
+          - ubuntu
+          - large
+```
+
