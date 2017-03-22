@@ -72,8 +72,9 @@ While it is likely in a non-virtualized installation of Kubernetes that networki
 
 ### Kubernetes On Bare Metal
 
-Once the groundwork of understanding and configuring a Host Pool service is complete, the orchestration of Kubernetes itself is straightforward.  An existing Kubernetes [blueprint](https://github.com/cloudify-examples/simple-kubernetes-blueprint/blob/master/openstack-blueprint.yaml) can be adapted to operate on the bare metal infrastructure.  In the case of the referenced blueprint (originally targeting Openstack), the exercise starts with including a reference to the Host Pool plugin and updating the compute nodes in the blueprint.  Since we aren't orchestrating networking in this example, we can remove all relationships, and then replacing Openstack related config with Host Pool equivalents.  The result is something like this:
+Once the groundwork of understanding and configuring a Host Pool service is complete, the orchestration of Kubernetes itself is straightforward.  An existing Kubernetes [blueprint](https://github.com/cloudify-examples/simple-kubernetes-blueprint/blob/master/openstack-blueprint.yaml) can be adapted to operate on the bare metal infrastructure.  In the case of the referenced blueprint (originally targeting Openstack), the exercise starts with including a reference to the Host Pool plugin and updating the compute nodes in the blueprint.  Since we aren't orchestrating networking in this example, we can remove all relationships, and then replacing Openstack related config with Host Pool equivalents.  The result is something like this (using the sample service filters from above):
 
+__BEFORE__
 ```yaml
 kubernetes_master_host:
     type: cloudify.openstack.nodes.Server
@@ -88,3 +89,22 @@ kubernetes_master_host:
       - type: cloudify.openstack.server_connected_to_floating_ip
         target: kubernetes_master_ip
 ```
+
+__AFTER__
+```yaml
+kubernetes_master_host:
+    type: cloudify.hostpool.nodes.LinuxHost
+    properties:
+      agent_config:
+        <<: *agent_config
+      filters:
+        tags:
+          - large
+          - centos
+```
+
+The remainder of the effort is largely removing all networking configuration.  Autoscaling and healing will function as expected, assuming the host pool has sufficient hosts defined.  Note also that the host pool configuration isn't fixed, and that additional machines can be made available by updating the host pool service via it's REST API.
+
+### Conclusion
+
+This post explained how Kubernetes can be managed by Cloudify on bare metal by a simple modification of already available blueprints.  This is a good example of the power of the compute abstraction in TOSCA modeling, made possible by the fact that both the pre-conversion Openstack `Server` type and the post-conversion Host Pool `Host` (or in this case the derived `LinuxHost` type are both derived ultimately from the `cloudify.nodes.Compute` type, which makes them easily interchangeable in blueprints.  It also demonstrates how, and why, Cloudify orchestration is not limited to clouds or virtualization.
