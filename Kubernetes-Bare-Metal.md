@@ -52,7 +52,7 @@ hosts:
       - medium
 ```
 
-This descriptor is consumed by the host pool service and represents the initial configuration.  Bear in mind that the configuration isn't static, and can be amended and updated via REST API.  In a blueprint, utilizing the host pool plugin, a hosts can be requested from the pool.  The resulting host pool can be treated like any other compute resource for the purposes of orchestration.
+This descriptor is consumed by the host pool service and represents the initial configuration.  Bear in mind that the configuration isn't static, and can be amended and updated via REST API.  In a blueprint, utilizing the host pool plugin, a host can be requested from the pool.  The resulting host pool can be treated like any other compute resource for the purposes of orchestration.
 
 ```yaml
 node_templates:
