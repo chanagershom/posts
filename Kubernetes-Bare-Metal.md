@@ -66,3 +66,25 @@ node_templates:
           - large
 ```
 
+#### Honorable Mention: The Netconf Plugin
+
+While it is likely in a non-virtualized installation of Kubernetes that networking will be set up manually, for completeness it is necessary to including a mention of the Cloudify [Netconf Plugin](https://github.com/cloudify-cosmo/cloudify-netconf-plugin).  This plugin provides bare metal orchestration capability in the networking domain (for devices that support [Netconf](https://tools.ietf.org/html/rfc6241)).  Of related usefulness is the [yttc](https://github.com/cloudify-cosmo/yttc) tool that converts YANG syntax to TOSCA types for inclusion in blueprints.
+
+### Kubernetes On Bare Metal
+
+Once the groundwork of understanding and configuring a Host Pool service is complete, the orchestration of Kubernetes itself is straightforward.  An existing Kubernetes [blueprint](https://github.com/cloudify-examples/simple-kubernetes-blueprint/blob/master/openstack-blueprint.yaml) can be adapted to operate on the bare metal infrastructure.  In the case of the referenced blueprint (originally targeting Openstack), the exercise starts with including a reference to the Host Pool plugin and updating the compute nodes in the blueprint.  Since we aren't orchestrating networking in this example, we can remove all relationships, and then replacing Openstack related config with Host Pool equivalents.  The result is something like this:
+
+```yaml
+kubernetes_master_host:
+    type: cloudify.openstack.nodes.Server
+    properties:
+      agent_config:
+        <<: *agent_config
+      image: { get_input: image }
+      flavor: { get_input: flavor }
+    relationships:
+      - target: kubernetes_security_group
+        type: cloudify.openstack.server_connected_to_security_group
+      - type: cloudify.openstack.server_connected_to_floating_ip
+        target: kubernetes_master_ip
+```
