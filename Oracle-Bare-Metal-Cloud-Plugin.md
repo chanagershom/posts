@@ -6,7 +6,9 @@ Late last year, Oracle [announced](https://blogs.oracle.com/cloud/entry/oracle_b
 
 Like all IAAS plugins for Cloudify, the BMC plugin maps nouns in the underlying IAAS API to TOSCA types, and the verbs get mapped to orchestrator lifecycle events (e.g. "create" and "configure").  The current version of the BMC plugin only addresses compute and networking domains of the BMC [SDK](https://oracle-bare-metal-cloud-services-python-sdk.readthedocs.io/en/latest/).  The plugin provides the ability to orchestrate instances (both bare metal and virtual), along with related networking components such as networks, subnets, security, and internet gateways.
 
+
 <img src="https://github.com/dfilppi/posts/blob/master/images/bmc-plugin/bmc-plugin-components.png" />
+
 
 The following components and relationships are supported:
 
@@ -63,4 +65,4 @@ After the bootstrap is complete, you can upload blueprints and have full Cloudif
 
 ## Conclusion
 
-Oracle has bridged the gap between conventional data centers and the Cloud by providing an infrastructure as a service interface to bare metal servers, while retaining the flexibility of virtual networking.  Now this powerful environment has been added to the ever growing Cloudify family of support clouds.
+Oracle has bridged the gap between conventional data centers and the Cloud by providing an infrastructure as a service interface to bare metal servers, while retaining the flexibility of virtual networking.  Now this powerful environment has been added to the ever growing Cloudify family of supported clouds.  As always, the code and examples are available on [github](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin).
