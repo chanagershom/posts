@@ -8,7 +8,21 @@ Like all IAAS plugins for Cloudify, the BMC plugin maps nouns in the underlying 
 
 <img src="https://github.com/dfilppi/posts/blob/master/images/bmc-plugin/bmc-plugin-components.png" />
 
+The following components and relationships are supported:
+
+* #### `cloudify.oraclebmc.nodes.Instance`
+Represents a compute node, either bare metal or virtual (based on the "instance_shape") property.  Accept configuration properties such as `image_id`, `instance_shape`, `compartment_id`, and `availability_domain`.  After the `install` workflow is complete, the instance will have attributes `public_ip` and `private_ip`.
+
+* #### `cloudify.oraclebmc.relationships.instance_connected_to_subnet`
+This relationship connects the source side (the instance) with the target (a `cloudify.oraclebmc.nodes.Subnet` node).
+
+* #### `
+
 An example blueprint can be found in the Cloudify Examples [repo](https://github.com/cloudify-examples/simple-kubernetes-blueprint/blob/master/bmc-blueprint.yaml).  
+
+### Limitations
+
+When used with the Cloudify Manager, the plugin must be installed via the `cfy plugins upload` method.  A `wgn` package is included in the [repo](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin).
 
 ## The Cloudify Oracle BMC Manager Blueprint
 
