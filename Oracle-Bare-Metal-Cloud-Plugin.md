@@ -22,7 +22,22 @@ This node type represents a subnet network.  This node is configured with a `cid
 * #### `cloudify.oraclebmc.nodes.Gateway`
 This node represents an internet gateway.  It is configured with a list of routing rules, which amounts to an internet firewall.  It is associated with a target network via the `cloudify.oraclebmc.relationships.gateway_connected_to_network` relationship.
 
-An example blueprint can be found in the Cloudify Examples [repo](https://github.com/cloudify-examples/simple-kubernetes-blueprint/blob/master/bmc-blueprint.yaml).  
+An simple single instance example blueprint can be found in the plugin [examples](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin/blob/master/examples/blueprint/test.yaml) directory.  Bear in mind that it, and the other example mentioned later, rely on images that have `firewalld` disabled. 
+
+```yaml
+
+node_templates:
+
+  server:
+    type: cloudify.oraclebmc.nodes.Instance
+    properties:
+      install_agent: false
+      bmc_config: *bmc_config
+      public_key_file: 'somekey.pub'
+...
+```
+
+A more elaborate example blueprint can be found in the Cloudify Examples [repo](https://github.com/cloudify-examples/simple-kubernetes-blueprint/blob/master/bmc-blueprint.yaml), which starts an autoscaling/autohealing Kubernetes cluster.
 
 ### Limitations
 
