@@ -26,7 +26,26 @@ An example blueprint can be found in the Cloudify Examples [repo](https://github
 
 ### Limitations
 
-When used with the Cloudify Manager, the plugin must be installed via the `cfy plugins upload` method.  A `wgn` package is included in the [repo](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin).
+When used with the Cloudify Manager, the plugin must be installed via the `cfy plugins upload` method.  A `wgn` package is included in the [repo](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin).  The plugin currently only addresses compute and networking aspects of the cloud API.  Future revisions will expand support to other aspects such as storage.
 
 ## The Cloudify Oracle BMC Manager Blueprint
 
+<img src="http://docs.getcloudify.org/3.4.1/images/architecture/cloudify_advanced_architecture.png"/>
+
+In order to fully support Cloudify orchestration capabilities, a Cloudify manager is needed.  In the [`examples/manager`](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin/tree/master/examples/manager) directory, there is a Cloudify manager [blueprint](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin/blob/master/examples/manager/oracle-bmc-manager-blueprint.yaml) that support the Oracle Bare Metal Cloud.  This blueprint is used to bootstrap a Cloudify manager in a similar fashion to manager blueprints for [other](https://github.com/cloudify-cosmo/cloudify-manager-blueprints) clouds.  The blueprint [inputs](https://github.com/cloudify-incubator/cloudify-oraclebmc-plugin/blob/master/examples/manager/oracle-bmc-manager-blueprint-inputs.yaml) file has description of the settings needed.
+
+### Prerequisites.
+
+The image used must be a Centos 7 image on an instance shape with at least 8GB of RAM.  The image must have `firewalld` (enabled by default) _disabled_.  You'll need Oracle BMC API credentials as well.  The blueprints directory contains the file `oracle--agent.tar.gz`.  After manager bootstrap, this file should be added to the `/opt/manager/resources/packages/agents` directory, if you'll be running agents on Oracle Linux machines.
+
+### Bootstrapping
+
+The bootstrapping process is no different from the standard [process](http://docs.getcloudify.org/3.4.1/cli/bootstrap).  First you'll need to get the Cloudify [CLI](http://getcloudify.org/downloads/get_cloudify.html) and install it on a machine with internet access to the BMC API.  Then just:
+
+* `cfy bootstrap --install-plugins -p oracle-bmc-manager-blueprint.yaml -i oracle-bmc-manager-blueprint-inputs.yaml`
+
+After the bootstrap is complete, you can upload blueprints and have full Cloudify manager functionality.
+
+## Conclusion
+
+Oracle has bridged the gap between conventional data centers and the Cloud by providing an infrastructure as a service interface to bare metal servers, while retaining the flexibility of virtual networking.  Now this powerful environment has been added to the ever growing Cloudify family of support clouds.
