@@ -1,3 +1,4 @@
+<img src="https://github.com/dfilppi/posts/blob/master/images/bmc-plugin/oraclebmc.png" />
 
 Late last year, Oracle [announced](https://blogs.oracle.com/cloud/entry/oracle_bare_metal_cloud_services) the availability of their Bare Metal Cloud IAAS to the world.  The Bare Metal Cloud (BMC) combines physical instances combined with a fully virtualized networking infrastructure that emulates a traditional datacenter, but with the convenience and agility that infrastructure as a service provides.  With non-virtualized compute and microsecond inter-host network latency, the BMC is particularly suited to demanding high performance workloads.  For the latest on the bare metal cloud, see the Oracle [website](https://cloud.oracle.com/en_US/bare-metal).  This post covers the Cloudify integration with the Oracle BMC.
 
