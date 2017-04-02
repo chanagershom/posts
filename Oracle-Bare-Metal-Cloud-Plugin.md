@@ -57,7 +57,7 @@ The image used must be a Centos 7 image on an instance shape with at least 8GB o
 
 ### Bootstrapping
 
-The bootstrapping process is no different from the standard [process](http://docs.getcloudify.org/3.4.1/cli/bootstrap).  First you'll need to get the Cloudify [CLI](http://getcloudify.org/downloads/get_cloudify.html) and install it on a machine with internet access to the BMC API.  Then just:
+The bootstrapping process is no different from the standard [process](http://docs.getcloudify.org/3.4.1/cli/bootstrap).  First you'll need to get the Cloudify [CLI](http://getcloudify.org/downloads/get_cloudify.html) and install it on a machine with internet access to the BMC API.  You'll also need to clone the [manager blueprints repo](https://github.com/cloudify-cosmo/cloudify-manager-blueprints) and place the BMC blueprint and inputs there. Then just:
 
 * `cfy bootstrap --install-plugins -p oracle-bmc-manager-blueprint.yaml -i oracle-bmc-manager-blueprint-inputs.yaml`
 
